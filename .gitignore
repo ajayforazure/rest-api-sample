@@ -113,3 +113,9 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# added by Ahmad Tahani
+public/image_profile/*
+public/tmp_upload/*
+# expect the defualt image profile
+!public/image_profile/default_image_profile.png
