@@ -117,5 +117,7 @@ jspm_packages
 # added by Ahmad Tahani
 public/image_profile/*
 public/tmp_upload/*
+
+!public/tmp_upload
 # expect the defualt image profile
 !public/image_profile/default_image_profile.png
