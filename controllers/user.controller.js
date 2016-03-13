@@ -4,7 +4,7 @@ var jsonfile = require('jsonfile'),
     uuid = require('node-uuid'),
     formidable = require('formidable'),
     validator = require('validator'),
-    fs = require('fs');
+    fs = require('fs-extra');
 
 var users_json_path = global.__base_data + '/users.json';
 var access_token_json_path = global.__base_data + '/accessTokens.json';
@@ -64,25 +64,33 @@ var _createNewAccessToken = function (user_id, app_id, expire_at, access_token, 
  */
 exports.apiRequestAuthorization = function (req, res, next) {
     var accessTokenFromHeader = req.get('Authorization');
-    accessTokenFromHeader = accessTokenFromHeader.replace(/Bearer | | bearer/g, '');
-    //check is valid accessToken or not
-    var accessTokens = _getAccessTokensFromJsonFile();
-    var found_access_token;
-    accessTokens.forEach(function (accessToken) {
-        if (accessToken.access_token === accessTokenFromHeader) {
-            found_access_token = accessToken;
-        }
-    });
-    if (found_access_token) {
-        //get user information that have this accessToken
-        var users = _getUsersFromJsonFile();
-        users.forEach(function (user) {
-            if (user.id === found_access_token.user_id) {
-                req.user = user;
-                req.app_id = found_access_token.app_id;
-                next();
+    if (accessTokenFromHeader) {
+        accessTokenFromHeader = accessTokenFromHeader.replace(/Bearer /ig, '');
+        //check is valid accessToken or not
+        var accessTokens = _getAccessTokensFromJsonFile();
+        var found_access_token;
+        accessTokens.forEach(function (accessToken) {
+            if (accessToken.access_token === accessTokenFromHeader) {
+                found_access_token = accessToken;
             }
         });
+        if (found_access_token) {
+            //get user information that have this accessToken
+            var users = _getUsersFromJsonFile();
+            users.forEach(function (user) {
+                if (user.id === found_access_token.user_id) {
+                    req.user = user;
+                    req.app_id = found_access_token.app_id;
+                    next();
+                }
+            });
+        }
+        else {
+            res.status(401).send({
+                type: 'ACCESS_TOKEN_IS_NOT_VALID',
+                description: 'Access token is not valid'
+            });
+        }
     }
     else {
         res.status(401).send({
@@ -553,9 +561,14 @@ exports.updateImageProfile = function (req, res) {
         res.status(500).send({type: 'INTERNAL_SERVER_ERROR', description: 'Internal server error'});
     });
     form.on('end', function (fields, files) {
+        console.log('the fields are');
+        console.log(fields);
+        console.log('the files is ');
+        console.log(files);
         var tmp_uploaded_file = this.openedFiles[0].path;
-        //copy the uploaded file to des
-        fs.copy(tmp_uploaded_file, des_image_path, function (err) {
+
+        //move the uploaded file to des
+        fs.move(tmp_uploaded_file, des_image_path, function (err) {
             if (err) {
                 res.status(500).send({type: 'INTERNAL_SERVER_ERROR', description: 'Internal server error'});
             }

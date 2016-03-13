@@ -15,7 +15,7 @@ global.__base_data = path.resolve('./data');
 global.__base_image = path.resolve('./public/image_profile');
 global.__base_tmp_upload = path.resolve('./public/tmp_upload');
 //TODO : should change localhost with the server ip address
-global.__media_end_point = 'http://localhost:8081/image_profile/';
+global.__media_end_point = 'http://192.168.0.50:8081/image_profile/';
 
 
 /**

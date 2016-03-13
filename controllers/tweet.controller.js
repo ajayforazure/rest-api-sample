@@ -205,10 +205,10 @@ exports.getListOfTweets = function (req, res) {
                     result.push(tweet);
                 }
             });
-            res.json(result);
+            res.json(result.reverse());
         }
         else {
-            res.json(tweets);
+            res.json(tweets.reverse());
         }
     }
     else {
