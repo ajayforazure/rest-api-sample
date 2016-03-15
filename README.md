@@ -12,6 +12,7 @@ just install [Node.js](https://nodejs.org/en/) in your system
 ```
 $ git clone https://github.com/atahani/rest-api-sample
 $ cd rest-api-sample
+$ git branch -a | grep -v HEAD | perl -ne 'chomp($_); s|^\*?\s*||; if (m|(.+)/(.+)| && not $d{$2}) {print qq(git branch --track $2 $1/$2\n)} else {$d{$_}=1}' | csh -xfs
 ```
 
 NOTE: in this repo we have two branch `simple_rest_api` and `rest_api_with_authentication`
@@ -25,5 +26,5 @@ NOTE: in this repo we have two branch `simple_rest_api` and `rest_api_with_authe
 
 ### for more information see the slide and videos
 
-* [Youtube PlayList Link](https://www.youtube.com/playlist?list=PL-0EQDLPE23N3WkenBrZzTLfnOIAIybKm)
+* [Youtube Playlist link](https://www.youtube.com/playlist?list=PL-0EQDLPE23N3WkenBrZzTLfnOIAIybKm)
 * [Slides on Google Slide](https://goo.gl/lzwXys)
